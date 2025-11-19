@@ -1,11 +1,11 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { User } from '../data/user';
+import { Person } from '../types/Person';
 
 type Props = {
-  people: object[];
+  people: Person[];
   delay: number;
-  selectedUser: User | null;
-  onSelectedUser: (user: User | null) => void;
+  selectedUser: Person | null;
+  onSelectedUser: (user: Person | null) => void;
 };
 
 // Dropdown
@@ -31,8 +31,8 @@ export const Autocomplete: React.FC<Props> = ({
       return people;
     }
 
-    return people.filter((user: User) => user.name.includes(appliedQuery));
-  }, [appliedQuery, selectedUser]);
+    return people.filter((user: Person) => user.name.includes(appliedQuery));
+  }, [appliedQuery, selectedUser, people]);
 
   function handleQurryChange(event: React.ChangeEvent<HTMLInputElement>) {
     setQuery(event.target.value);
@@ -69,7 +69,7 @@ export const Autocomplete: React.FC<Props> = ({
           <div className="dropdown-menu" role="menu" data-cy="suggestions-list">
             <div className="dropdown-content">
               {filteredUsers &&
-                filteredUsers.map((person: User) => (
+                filteredUsers.map((person: Person) => (
                   <div
                     className="dropdown-item"
                     data-cy="suggestion-item"

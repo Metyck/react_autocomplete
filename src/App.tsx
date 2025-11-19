@@ -2,12 +2,12 @@ import React, { useMemo, useState } from 'react';
 import './App.scss';
 import { peopleFromServer } from './data/people';
 import { Autocomplete } from './Components/Autocomplete';
-import { User } from './data/user';
+import { Person } from './types/Person';
 
 // App
 
 export const App: React.FC = () => {
-  const [selectedUser, setSelectedUser] = useState<null | User>(null);
+  const [selectedUser, setSelectedUser] = useState<null | Person>(null);
 
   const selectedUserHelper = useMemo(() => {
     return (

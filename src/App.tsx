@@ -19,6 +19,7 @@ export const App: React.FC = () => {
   const [querry, setQuerry] = useState<string>('');
   const [appliedQuerry, setAppliedQuerry] = useState<string>('');
   const [selectedUser, setSelectedUser] = useState<null | User>(null);
+  const [focused, setFocused] = useState(false);
 
   // helper functions
   const filteredUsers = useMemo(() => {
@@ -52,16 +53,17 @@ export const App: React.FC = () => {
 
         <div className="dropdown is-active">
           <DropdownTrigger
+            delay={300}
             querry={selectedUser?.name || querry}
-            appliedQuerry={appliedQuerry}
             onQuerryChange={newQuerry => setQuerry(newQuerry)}
             onAppliedChange={newAppliedQuerry => {
               setAppliedQuerry(newAppliedQuerry);
               setSelectedUser(null);
             }}
+            onFocused={isFocused => setFocused(isFocused)}
           />
 
-          {filteredUsers?.length > 0 && !selectedUser && (
+          {filteredUsers?.length > 0 && focused && (
             <div
               className="dropdown-menu"
               role="menu"
@@ -74,7 +76,12 @@ export const App: React.FC = () => {
                       className="dropdown-item"
                       data-cy="suggestion-item"
                       key={`${person.name}-${person.born}`}
-                      onClick={() => setSelectedUser(person)}
+                      onMouseDown={() => {
+                        if (person.name) {
+                          setSelectedUser(person);
+                          setQuerry(person.name)
+                        }
+                      }}
                     >
                       <p className="has-text-link">{person.name}</p>
                     </div>

@@ -1,19 +1,21 @@
 import React, { useRef } from 'react';
 
 type Props = {
+  delay: number;
   querry: string;
   onQuerryChange: (querry: string) => void;
-  appliedQuerry: string;
   onAppliedChange: (querry: string) => void;
+  onFocused: (querry: boolean) => void;
 };
 
 // Dropdown
 
 export const DropdownTrigger: React.FC<Props> = ({
+  delay = 300,
   querry = '',
-  appliedQuerry = '',
   onQuerryChange,
   onAppliedChange,
+  onFocused,
 }: Props) => {
   const timerId = useRef(0);
 
@@ -25,10 +27,10 @@ export const DropdownTrigger: React.FC<Props> = ({
     window.clearTimeout(timerId.current);
 
     timerId.current = window.setTimeout(() => {
-      if (event.target.value !== appliedQuerry) {
-        onAppliedChange(event.target.value);
-      }
-    }, 300);
+      const trimmed = event.target.value.trim();
+
+      onAppliedChange(trimmed);
+    }, delay);
   }
 
   // build part
@@ -42,6 +44,8 @@ export const DropdownTrigger: React.FC<Props> = ({
         className="input"
         data-cy="search-input"
         onChange={event => handleQurryChange(event)}
+        onFocus={() => onFocused(true)}
+        onBlur={() => onFocused(false)}
       />
     </div>
   );

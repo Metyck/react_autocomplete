@@ -24,7 +24,11 @@ export const App: React.FC = () => {
   // helper functions
   const filteredUsers = useMemo(() => {
     if (selectedUser) {
-      return [selectedUser.name];
+      return [selectedUser]; // DELETE NAME PROPERTY to show the selected users in a list instance of underfined
+    }
+
+    if (!appliedQuerry) {
+      return peopleFromServer;
     }
 
     return peopleFromServer.filter((user: User) =>
@@ -55,7 +59,10 @@ export const App: React.FC = () => {
           <DropdownTrigger
             delay={300}
             querry={selectedUser?.name || querry}
-            onQuerryChange={newQuerry => setQuerry(newQuerry)}
+            onQuerryChange={newQuerry => {
+              setQuerry(newQuerry);
+              setSelectedUser(null);
+            }}
             onAppliedChange={newAppliedQuerry => {
               setAppliedQuerry(newAppliedQuerry);
               setSelectedUser(null);
@@ -79,7 +86,7 @@ export const App: React.FC = () => {
                       onMouseDown={() => {
                         if (person.name) {
                           setSelectedUser(person);
-                          setQuerry(person.name)
+                          setQuerry(person.name);
                         }
                       }}
                     >
